@@ -6,10 +6,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.projeto.bancodesangue.doadores.dtos.DoadorPorEstadoDTO;
 import com.projeto.bancodesangue.doadores.entities.Doador;
 import com.projeto.bancodesangue.doadores.entities.Endereco;
 import com.projeto.bancodesangue.doadores.entities.Informacao;
+import com.projeto.bancodesangue.doadores.projections.DoadorPorEstadoProjection;
 import com.projeto.bancodesangue.doadores.repositories.DoadorRepository;
 import com.projeto.bancodesangue.doadores.repositories.EnderecoRepository;
 import com.projeto.bancodesangue.doadores.repositories.InformacaoRepository;
@@ -25,7 +28,7 @@ public class DoadorService
 	
 	@Autowired
     private InformacaoRepository informacaoRepository;
-    
+	
 	public void importarDados(List<Map<String, Object>> jsonDataList) throws IOException 
 	{
         for (Map<String, Object> jsonData : jsonDataList) 
@@ -61,4 +64,12 @@ public class DoadorService
             informacaoRepository.save(informacao);
         }
     }
+	
+	@Transactional(readOnly = true)
+	public List<DoadorPorEstadoDTO> contarDoadoresPorEstado() 
+	{
+		List<DoadorPorEstadoProjection> result = doadorRepository.countDoadorPorEstado();
+		return result.stream().map(x -> new DoadorPorEstadoDTO(x)).toList();
+	}
+
 }
