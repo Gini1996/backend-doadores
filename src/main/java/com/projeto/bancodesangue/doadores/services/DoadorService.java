@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.projeto.bancodesangue.doadores.dtos.DoadorPorEstadoDTO;
 import com.projeto.bancodesangue.doadores.dtos.ImcPorFaixaEtariaDTO;
+import com.projeto.bancodesangue.doadores.dtos.MediaIdadeTipoSangueDTO;
 import com.projeto.bancodesangue.doadores.dtos.ObesidadePorGeneroDTO;
 import com.projeto.bancodesangue.doadores.entities.Doador;
 import com.projeto.bancodesangue.doadores.entities.Endereco;
 import com.projeto.bancodesangue.doadores.entities.Informacao;
-import com.projeto.bancodesangue.doadores.projections.DoadorPorEstadoProjection;
 import com.projeto.bancodesangue.doadores.projections.ImcPorFaixaEtariaProjection;
+import com.projeto.bancodesangue.doadores.projections.MediaIdadeTipoSangueProjection;
 import com.projeto.bancodesangue.doadores.projections.ObesidadePorGeneroProjection;
 import com.projeto.bancodesangue.doadores.repositories.DoadorRepository;
 import com.projeto.bancodesangue.doadores.repositories.EnderecoRepository;
@@ -71,13 +71,6 @@ public class DoadorService
     }
 	
 	@Transactional(readOnly = true)
-	public List<DoadorPorEstadoDTO> contarDoadoresPorEstado() 
-	{
-		List<DoadorPorEstadoProjection> result = doadorRepository.countDoadorPorEstado();
-		return result.stream().map(x -> new DoadorPorEstadoDTO(x)).toList();
-	}
-	
-	@Transactional(readOnly = true)
 	public List<ImcPorFaixaEtariaDTO> imcPorFaixaEtaria() 
 	{
 		List<ImcPorFaixaEtariaProjection> result = doadorRepository.ImcPorFaixa();
@@ -95,6 +88,13 @@ public class DoadorService
 										  return new ObesidadePorGeneroDTO(x.getGenero(), obesos);
 	            						})
 	            			  .collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<MediaIdadeTipoSangueDTO> idadeTipoSangue() 
+	{
+		List<MediaIdadeTipoSangueProjection> result = doadorRepository.idadeTipoSangue();
+		return result.stream().map(x -> new MediaIdadeTipoSangueDTO(x)).toList();
 	}
 	
 	private double round(double numero) 

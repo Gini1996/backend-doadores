@@ -1,24 +1,24 @@
 package com.projeto.bancodesangue.doadores.dtos;
 
-import com.projeto.bancodesangue.doadores.projections.DoadorPorEstadoProjection;
+import com.projeto.bancodesangue.doadores.projections.CandidatoPorEstadoProjection;
 
-public class DoadorPorEstadoDTO 
+public class CandidatoPorEstadoDTO 
 {
 	Long candidatos;
 	String estado;
 	
-	public DoadorPorEstadoDTO() 
+	public CandidatoPorEstadoDTO() 
 	{
 		
 	}
 	
-	public DoadorPorEstadoDTO(Long candidatos, String estado) 
+	public CandidatoPorEstadoDTO(Long candidatos, String estado) 
 	{
 		this.candidatos = candidatos;
 		this.estado = estado;
 	}
 	
-	public DoadorPorEstadoDTO(DoadorPorEstadoProjection projection) 
+	public CandidatoPorEstadoDTO(CandidatoPorEstadoProjection projection) 
 	{
 		candidatos = projection.getCandidatos();
 		estado = projection.getEstado();
