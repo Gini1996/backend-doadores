@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.bancodesangue.doadores.dtos.DoadorPorEstadoDTO;
 import com.projeto.bancodesangue.doadores.dtos.ImcPorFaixaEtariaDTO;
+import com.projeto.bancodesangue.doadores.dtos.ObesidadePorGeneroDTO;
 import com.projeto.bancodesangue.doadores.services.DoadorService;
 
 @RestController
@@ -48,6 +49,13 @@ public class DoadorController
     public ResponseEntity<List<ImcPorFaixaEtariaDTO>> imcPorFaixaEtaria() 
 	{
 		List<ImcPorFaixaEtariaDTO> result = doadorService.imcPorFaixaEtaria();
+	    return ResponseEntity.ok(result);
+    }
+	
+	@GetMapping("/obesosPorGenero")
+    public ResponseEntity<List<ObesidadePorGeneroDTO>> obesosPorGenero() 
+	{
+		List<ObesidadePorGeneroDTO> result = doadorService.obesosPorGenero();
 	    return ResponseEntity.ok(result);
     }
 }

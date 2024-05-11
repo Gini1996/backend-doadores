@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.projeto.bancodesangue.doadores.dtos.DoadorPorEstadoDTO;
 import com.projeto.bancodesangue.doadores.dtos.ImcPorFaixaEtariaDTO;
+import com.projeto.bancodesangue.doadores.dtos.ObesidadePorGeneroDTO;
 import com.projeto.bancodesangue.doadores.entities.Doador;
 import com.projeto.bancodesangue.doadores.entities.Endereco;
 import com.projeto.bancodesangue.doadores.entities.Informacao;
 import com.projeto.bancodesangue.doadores.projections.DoadorPorEstadoProjection;
 import com.projeto.bancodesangue.doadores.projections.ImcPorFaixaEtariaProjection;
+import com.projeto.bancodesangue.doadores.projections.ObesidadePorGeneroProjection;
 import com.projeto.bancodesangue.doadores.repositories.DoadorRepository;
 import com.projeto.bancodesangue.doadores.repositories.EnderecoRepository;
 import com.projeto.bancodesangue.doadores.repositories.InformacaoRepository;
@@ -81,6 +83,16 @@ public class DoadorService
 		List<ImcPorFaixaEtariaProjection> result = doadorRepository.ImcPorFaixa();
 		return result.stream().map(x -> { double imc = round(x.getImcMedio());
 										  return new ImcPorFaixaEtariaDTO(x.getFaixaEtaria(), imc);
+	            						})
+	            			  .collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<ObesidadePorGeneroDTO> obesosPorGenero() 
+	{
+		List<ObesidadePorGeneroProjection> result = doadorRepository.obesosPorGenero();
+		return result.stream().map(x -> { double obesos = round(x.getPercentualObesos());
+										  return new ObesidadePorGeneroDTO(x.getGenero(), obesos);
 	            						})
 	            			  .collect(Collectors.toList());
 	}
