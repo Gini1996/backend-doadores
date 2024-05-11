@@ -3,16 +3,19 @@ package com.projeto.bancodesangue.doadores.services;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.projeto.bancodesangue.doadores.dtos.DoadorPorEstadoDTO;
+import com.projeto.bancodesangue.doadores.dtos.ImcPorFaixaEtariaDTO;
 import com.projeto.bancodesangue.doadores.entities.Doador;
 import com.projeto.bancodesangue.doadores.entities.Endereco;
 import com.projeto.bancodesangue.doadores.entities.Informacao;
 import com.projeto.bancodesangue.doadores.projections.DoadorPorEstadoProjection;
+import com.projeto.bancodesangue.doadores.projections.ImcPorFaixaEtariaProjection;
 import com.projeto.bancodesangue.doadores.repositories.DoadorRepository;
 import com.projeto.bancodesangue.doadores.repositories.EnderecoRepository;
 import com.projeto.bancodesangue.doadores.repositories.InformacaoRepository;
@@ -71,5 +74,19 @@ public class DoadorService
 		List<DoadorPorEstadoProjection> result = doadorRepository.countDoadorPorEstado();
 		return result.stream().map(x -> new DoadorPorEstadoDTO(x)).toList();
 	}
-
+	
+	@Transactional(readOnly = true)
+	public List<ImcPorFaixaEtariaDTO> imcPorFaixaEtaria() 
+	{
+		List<ImcPorFaixaEtariaProjection> result = doadorRepository.ImcPorFaixa();
+		return result.stream().map(x -> { double imc = round(x.getImcMedio());
+										  return new ImcPorFaixaEtariaDTO(x.getFaixaEtaria(), imc);
+	            						})
+	            			  .collect(Collectors.toList());
+	}
+	
+	private double round(double numero) 
+	{
+	    return Math.round(numero * 100.0) / 100.0;
+	}
 }
