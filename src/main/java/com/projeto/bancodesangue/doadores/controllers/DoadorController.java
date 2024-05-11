@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projeto.bancodesangue.doadores.dtos.DoadorPorEstadoDTO;
 import com.projeto.bancodesangue.doadores.dtos.ImcPorFaixaEtariaDTO;
+import com.projeto.bancodesangue.doadores.dtos.MediaIdadeTipoSangueDTO;
 import com.projeto.bancodesangue.doadores.dtos.ObesidadePorGeneroDTO;
 import com.projeto.bancodesangue.doadores.services.DoadorService;
 
@@ -38,13 +38,6 @@ public class DoadorController
         }
     }
 	
-	@GetMapping("/doadorPorEstado")
-    public ResponseEntity<List<DoadorPorEstadoDTO>> contarDoadoresPorEstado() 
-	{
-		List<DoadorPorEstadoDTO> result = doadorService.contarDoadoresPorEstado();
-	    return ResponseEntity.ok(result);
-    }
-	
 	@GetMapping("/imcPorFaixa")
     public ResponseEntity<List<ImcPorFaixaEtariaDTO>> imcPorFaixaEtaria() 
 	{
@@ -56,6 +49,13 @@ public class DoadorController
     public ResponseEntity<List<ObesidadePorGeneroDTO>> obesosPorGenero() 
 	{
 		List<ObesidadePorGeneroDTO> result = doadorService.obesosPorGenero();
+	    return ResponseEntity.ok(result);
+    }
+	
+	@GetMapping("/idadeTpSangue")
+    public ResponseEntity<List<MediaIdadeTipoSangueDTO>> idadeTipoSangue() 
+	{
+		List<MediaIdadeTipoSangueDTO> result = doadorService.idadeTipoSangue();
 	    return ResponseEntity.ok(result);
     }
 }
