@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.projeto.bancodesangue.doadores.entities.Doador;
 import com.projeto.bancodesangue.doadores.projections.DoadorPorEstadoProjection;
 import com.projeto.bancodesangue.doadores.projections.ImcPorFaixaEtariaProjection;
+import com.projeto.bancodesangue.doadores.projections.ObesidadePorGeneroProjection;
 
 public interface DoadorRepository extends JpaRepository<Doador, Long>
 {
@@ -54,4 +55,13 @@ public interface DoadorRepository extends JpaRepository<Doador, Long>
     	 	       END
  	          ORDER BY faixaEtaria""")
 	    List<ImcPorFaixaEtariaProjection> ImcPorFaixa();
+	
+	@Query(nativeQuery = true, value = """
+			SELECT d.sexo genero, 
+	               100.0 * SUM(CASE WHEN i.peso / (i.altura * i.altura) > 30 THEN 1 ELSE 0 END) / COUNT(*) AS percentualObesos
+              FROM doador d
+        INNER JOIN informacao_doador i ON i.id_doador = d.id_doador
+        INNER JOIN endereco e ON e.id_endereco = d.id_endereco
+          GROUP BY d.sexo""")
+	    List<ObesidadePorGeneroProjection> obesosPorGenero();
 }
