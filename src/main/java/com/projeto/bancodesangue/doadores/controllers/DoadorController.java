@@ -1,5 +1,6 @@
 package com.projeto.bancodesangue.doadores.controllers;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,10 +20,17 @@ public class DoadorController
 	@Autowired
 	private DoadorService doadorService;
 	
-	@PostMapping("/importar")
-    public ResponseEntity<String> importData(@RequestBody List<Map<String, Object>> jsonDataList) 
+	@PostMapping("/importarPessoas")
+    public ResponseEntity<String> importarPessoas(@RequestBody List<Map<String, Object>> jsonDataList) 
 	{
-		doadorService.importarDoador(jsonDataList);
-        return ResponseEntity.ok("Dados importados com sucesso.");
+        try 
+        {
+        	doadorService.importarDados(jsonDataList);
+            return ResponseEntity.ok("Dados importados com sucesso.");
+        } 
+        catch (IOException e) 
+        {
+            return ResponseEntity.badRequest().body("Erro ao importar dados: " + e.getMessage());
+        }
     }
 }

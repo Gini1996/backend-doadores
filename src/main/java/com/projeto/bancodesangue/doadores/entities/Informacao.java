@@ -7,7 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,7 +27,8 @@ public class Informacao
 	@Column(name = "tipo_sanguineo")
 	private String tipoSanguineo;
 	
-	@ManyToOne
+	@OneToOne
+    @JoinColumn(name = "id_doador")
 	private Doador idDoador;
 
 	public Informacao() 
@@ -115,5 +117,4 @@ public class Informacao
 				&& Double.doubleToLongBits(peso) == Double.doubleToLongBits(other.peso)
 				&& Objects.equals(tipoSanguineo, other.tipoSanguineo);
 	}
-	
 }
