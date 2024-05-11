@@ -6,5 +6,5 @@ import com.projeto.bancodesangue.doadores.entities.Doador;
 
 public interface DoadorRepository extends JpaRepository<Doador, Long>
 {
-
+	
 }

@@ -14,8 +14,8 @@ import jakarta.persistence.Table;
 public class Endereco 
 {
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name = "id_endereco")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_endereco")
 	private Long idEndereco;
 	
 	private String cep;

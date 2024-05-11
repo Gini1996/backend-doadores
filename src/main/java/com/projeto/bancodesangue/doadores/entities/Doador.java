@@ -1,6 +1,7 @@
 package com.projeto.bancodesangue.doadores.entities;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -8,16 +9,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Doador")
+@Table(name = "doador")
 public class Doador 
 {
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name = "id_doador")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_doador")
 	private Long idDoador;
 	
 	@Column(columnDefinition = "TEXT")
@@ -41,7 +43,8 @@ public class Doador
 	@Column(columnDefinition = "TEXT")
 	private String email;
 	
-	@ManyToOne
+	@OneToOne
+    @JoinColumn(name = "id_endereco")
 	private Endereco idEndereco;
 
 	
@@ -111,11 +114,12 @@ public class Doador
 		return dtNascimento;
 	}
 
-	public void setDtNascimento(LocalDate dataNasc) 
+	public void setDtNascimento(String dtNascimento) 
 	{
-		this.dtNascimento = dataNasc;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		this.dtNascimento = LocalDate.parse(dtNascimento,formatter);
 	}
-
+	
 	public String getSexo() 
 	{
 		return sexo;

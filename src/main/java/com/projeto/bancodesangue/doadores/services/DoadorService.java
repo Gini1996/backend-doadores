@@ -1,7 +1,6 @@
 package com.projeto.bancodesangue.doadores.services;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,62 +25,40 @@ public class DoadorService
 	
 	@Autowired
     private InformacaoRepository informacaoRepository;
-	
-	public void importarDoador(List<Map<String, Object>> jsonDataList) 
+    
+	public void importarDados(List<Map<String, Object>> jsonDataList) throws IOException 
 	{
-		 for (Map<String, Object> jsonData : jsonDataList) 
-		 {
-	            importarJSON(jsonData);
-	     }
-	}
-	
-	private void importarJSON(Map<String, Object> jsonData)
-	{
-		Map<String, Object> doadorJson = (Map<String, Object>) jsonData.get("doador");
-        Doador doador = new Doador();
-        
-        doador.setNome((String) doadorJson.get("nome"));
-        doador.setCpf((String) doadorJson.get("cpf"));
-        doador.setRg((String) doadorJson.get("rg"));
-        
-        String dataNascStr = (String) doadorJson.get("data_nasc");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate dataNasc = LocalDate.parse(dataNascStr, formatter);
-        doador.setDtNascimento(dataNasc);
-        
-        doador.setSexo((String) doadorJson.get("sexo"));
-        doador.setNomeMae((String) doadorJson.get("mae"));
-        doador.setNomePai((String) doadorJson.get("pai"));
-        doador.setEmail((String) doadorJson.get("email"));
+        for (Map<String, Object> jsonData : jsonDataList) 
+        {
+            Endereco endereco = new Endereco();
+            endereco.setCep((String) jsonData.get("cep"));
+            endereco.setEndereco((String) jsonData.get("endereco"));
+            endereco.setNumero(Long.valueOf(jsonData.get("numero").toString()));
+            endereco.setBairro((String) jsonData.get("bairro"));
+            endereco.setCidade((String) jsonData.get("cidade"));
+            endereco.setEstado((String) jsonData.get("estado"));
+            endereco.setTelefoneFixo((String) jsonData.get("telefone_fixo"));
+            endereco.setCelular((String) jsonData.get("celular"));
+            enderecoRepository.save(endereco);
 
-        doadorRepository.save(doador);
-
-        Map<String, Object> enderecoJson = (Map<String, Object>) jsonData.get("endereco");
-        Endereco endereco = new Endereco();
-        
-        endereco.setCep((String) enderecoJson.get("cep"));
-        endereco.setEndereco((String) enderecoJson.get("endereco"));
-        endereco.setNumero((Long) enderecoJson.get("numero"));
-        endereco.setBairro((String) enderecoJson.get("bairro"));
-        endereco.setCidade((String) enderecoJson.get("cidade"));
-        endereco.setEstado((String) enderecoJson.get("estado"));
-        endereco.setTelefoneFixo((String) enderecoJson.get("telefone_fixo"));
-        endereco.setCelular((String) enderecoJson.get("celular"));
-        
-        enderecoRepository.save(endereco);
-        
-
-        Map<String, Object> informacaoJson = (Map<String, Object>) jsonData.get("informacao");
-        Informacao informacao = new Informacao();
-        
-        double altura = (double) informacaoJson.get("altura");
-        informacao.setAltura(altura);
-        
-        double peso = (double) informacaoJson.get("peso");
-        informacao.setPeso(peso);
-        
-        informacao.setTipoSanguineo((String) informacaoJson.get("tipo_sanguineo"));
-        
-        informacaoRepository.save(informacao);
-	}
+            Doador doador = new Doador();
+            doador.setNome((String) jsonData.get("nome"));
+            doador.setCpf((String) jsonData.get("cpf"));
+            doador.setRg((String) jsonData.get("rg"));
+            doador.setDtNascimento((String) jsonData.get("data_nasc"));
+            doador.setSexo((String) jsonData.get("sexo"));
+            doador.setNomeMae((String) jsonData.get("mae"));
+            doador.setNomePai((String) jsonData.get("pai"));
+            doador.setEmail((String) jsonData.get("email"));
+            doador.setIdEndereco(endereco);
+            doadorRepository.save(doador);
+            
+            Informacao informacao = new Informacao();
+            informacao.setAltura(Double.valueOf(jsonData.get("altura").toString()));
+            informacao.setPeso(Double.valueOf(jsonData.get("peso").toString()));
+            informacao.setTipoSanguineo((String) jsonData.get("tipo_sanguineo"));
+            informacao.setIdDoador(doador); 
+            informacaoRepository.save(informacao);
+        }
+    }
 }
